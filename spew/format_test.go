@@ -72,7 +72,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/davecgh/go-spew/spew"
+	"github.com/TimonOmsk/go-spew/spew"
 )
 
 // formatterTest is used to describe a test to be performed against NewFormatter.
@@ -1554,5 +1554,29 @@ func TestPrintSortedKeys(t *testing.T) {
 	expected = "map[error: 1:1 error: 2:2 error: 3:3]"
 	if s != expected {
 		t.Errorf("Sorted keys mismatch 6:\n  %v %v", s, expected)
+	}
+}
+
+type testStructPtr struct {
+	x *int
+	s *string
+}
+
+func TestPrintDisablePointerAdresses(t *testing.T) {
+	cfg := spew.ConfigState{DisablePointerAddresses: true}
+	aX := 1
+	aS := "test"
+	s := cfg.Sprintf("%+v", &testStructPtr{x: &aX, s: &aS})
+	expected := "<*>{x:<*>1 s:<*>test}"
+	if s != expected {
+		t.Errorf("Disable pointer addresses mismatch 1:\n  %v %v", s, expected)
+	}
+
+	cfg2 := spew.ConfigState{DisablePointerAddresses: false}
+	ptrStruct := &testStructPtr{x: &aX, s: &aS}
+	s2 := cfg2.Sprintf("%+v", ptrStruct)
+	expected2 := fmt.Sprintf("<*>(%p){x:<*>(%p)1 s:<*>(%p)test}", ptrStruct, &aX, &aS)
+	if s2 != expected2 {
+		t.Errorf("Disable pointer addresses mismatch 2:\n  %v %v", s2, expected2)
 	}
 }

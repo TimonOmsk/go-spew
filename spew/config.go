@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 )
 
 // ConfigState houses the configuration options used by spew to format and
@@ -100,9 +101,72 @@ type ConfigState struct {
 	SpewKeys bool
 }
 
+const (
+	cfgIdentDefault                   = " "
+	cfgMaxDepthDefault                = 0
+	cfgDisableMethodsDefault          = false
+	cfgDisablePointerMethodsDefault   = false
+	cfgDisablePointerAddressesDefault = false
+	cfgDisableCapacitiesDefault       = false
+	cfgContinueOnMethodDefault        = false
+	cfgSortKeysDefault                = false
+	cfgSpewKeysDefault                = false
+)
+
+const (
+	envSpewCfgIndent                  = "SPEW_CFG_INDENT"
+	envSpewCfgMaxDepth                = "SPEW_CFG_MAXDEPTH"
+	envSpewCfgDisableMethods          = "SPEW_CFG_DISABLE_METHODS"
+	envSpewCfgDisablePointerMethods   = "SPEW_CFG_DISABLE_POINTER_METHODS"
+	envSpewCfgDisablePointerAddresses = "SPEW_CFG_DISABLE_POINTER_ADDRESSES"
+	envSpewCfgDisableCapacities       = "SPEW_CFG_DISABLE_CAPACITIES"
+	envSpewCfgContinueOnMethod        = "SPEW_CFG_CONTINUE_ON_METHOD"
+	envSpewCfgSortKeys                = "SPEW_CFG_SORT_KEYS"
+	envSpewCfgSpewKeys                = "SPEW_CFG_SPEW_KEYS"
+)
+
+func getEnvOrDefault(env string, defaultValue string) string {
+	if value := os.Getenv(env); value != "" {
+		return value
+	}
+	return defaultValue
+}
+
+func getEnvOrDefaultInt(env string, defaultValue int) int {
+	if value := os.Getenv(env); value != "" {
+		if intValue, err := strconv.Atoi(value); err == nil {
+			return intValue
+		}
+	}
+	return defaultValue
+}
+
+func getEnvOrDefaultBool(env string, defaultValue bool) bool {
+	if value := os.Getenv(env); value != "" {
+		if boolValue, err := strconv.ParseBool(value); err == nil {
+			return boolValue
+		}
+	}
+	return defaultValue
+}
+
+func initCfg() ConfigState {
+	return ConfigState{
+		Indent:                  getEnvOrDefault(envSpewCfgIndent, cfgIdentDefault),
+		MaxDepth:                getEnvOrDefaultInt(envSpewCfgMaxDepth, cfgMaxDepthDefault),
+		DisableMethods:          getEnvOrDefaultBool(envSpewCfgDisableMethods, cfgDisableMethodsDefault),
+		DisablePointerMethods:   getEnvOrDefaultBool(envSpewCfgDisablePointerMethods, cfgDisablePointerMethodsDefault),
+		DisablePointerAddresses: getEnvOrDefaultBool(envSpewCfgDisablePointerAddresses, cfgDisablePointerAddressesDefault),
+		DisableCapacities:       getEnvOrDefaultBool(envSpewCfgDisableCapacities, cfgDisableCapacitiesDefault),
+		ContinueOnMethod:        getEnvOrDefaultBool(envSpewCfgContinueOnMethod, cfgContinueOnMethodDefault),
+		SortKeys:                getEnvOrDefaultBool(envSpewCfgSortKeys, cfgSortKeysDefault),
+		SpewKeys:                getEnvOrDefaultBool(envSpewCfgSpewKeys, cfgSpewKeysDefault),
+	}
+}
+
 // Config is the active configuration of the top-level functions.
 // The configuration can be changed by modifying the contents of spew.Config.
-var Config = ConfigState{Indent: " "}
+var Config = initCfg()
 
 // Errorf is a wrapper for fmt.Errorf that treats each argument as if it were
 // passed with a Formatter interface returned by c.NewFormatter.  It returns
@@ -254,15 +318,15 @@ pointer addresses used to indirect to the final value.  It provides the
 following features over the built-in printing facilities provided by the fmt
 package:
 
-	* Pointers are dereferenced and followed
-	* Circular data structures are detected and handled properly
-	* Custom Stringer/error interfaces are optionally invoked, including
-	  on unexported types
-	* Custom types which only implement the Stringer/error interfaces via
-	  a pointer receiver are optionally invoked when passing non-pointer
-	  variables
-	* Byte arrays and slices are dumped like the hexdump -C command which
-	  includes offsets, byte values in hex, and ASCII output
+  - Pointers are dereferenced and followed
+  - Circular data structures are detected and handled properly
+  - Custom Stringer/error interfaces are optionally invoked, including
+    on unexported types
+  - Custom types which only implement the Stringer/error interfaces via
+    a pointer receiver are optionally invoked when passing non-pointer
+    variables
+  - Byte arrays and slices are dumped like the hexdump -C command which
+    includes offsets, byte values in hex, and ASCII output
 
 The configuration options are controlled by modifying the public members
 of c.  See ConfigState for options documentation.
@@ -295,12 +359,12 @@ func (c *ConfigState) convertArgs(args []interface{}) (formatters []interface{})
 
 // NewDefaultConfig returns a ConfigState with the following default settings.
 //
-// 	Indent: " "
-// 	MaxDepth: 0
-// 	DisableMethods: false
-// 	DisablePointerMethods: false
-// 	ContinueOnMethod: false
-// 	SortKeys: false
+//	Indent: " "
+//	MaxDepth: 0
+//	DisableMethods: false
+//	DisablePointerMethods: false
+//	ContinueOnMethod: false
+//	SortKeys: false
 func NewDefaultConfig() *ConfigState {
 	return &ConfigState{Indent: " "}
 }
