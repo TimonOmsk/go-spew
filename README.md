@@ -16,20 +16,17 @@ post about it
 
 ## Documentation
 
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/TimonOmsk/go-spew/spew)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/TimonOmsk/go-spew)
 
 Full `go doc` style documentation for the project can be viewed online without
 installing this package by using the excellent GoDoc site here:
-http://godoc.org/github.com/TimonOmsk/go-spew/spew
+http://godoc.org/github.com/TimonOmsk/go-spew
 
-You can also view the documentation locally once the package is installed with
-the `godoc` tool by running `godoc -http=":6060"` and pointing your browser to
-http://localhost:6060/pkg/github.com/TimonOmsk/go-spew/spew
 
 ## Installation
 
 ```bash
-$ go get -u github.com/TimonOmsk/go-spew/spew
+$ go get -u github.com/TimonOmsk/go-spew
 ```
 
 ## Quick Start
