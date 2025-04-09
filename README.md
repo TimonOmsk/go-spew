@@ -5,8 +5,7 @@ go-spew
 
 Go-spew implements a deep pretty printer for Go data structures to aid in
 debugging.  A comprehensive suite of tests with 100% test coverage is provided
-to ensure proper functionality.  See `test_coverage.txt` for the gocov coverage
-report.  Go-spew is licensed under the liberal ISC license, so it may be used in
+to ensure proper functionality.  Go-spew is licensed under the liberal ISC license, so it may be used in
 open source or commercial projects.
 
 If you're interested in reading about how this package came to life and some
@@ -16,17 +15,17 @@ post about it
 
 ## Documentation
 
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/TimonOmsk/go-spew)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/timonomsk/go-spew)
 
 Full `go doc` style documentation for the project can be viewed online without
 installing this package by using the excellent GoDoc site here:
-http://godoc.org/github.com/TimonOmsk/go-spew
+http://godoc.org/github.com/timonomsk/go-spew
 
 
 ## Installation
 
 ```bash
-$ go get -u github.com/TimonOmsk/go-spew
+$ go get -u github.com/timonomsk/go-spew
 ```
 
 ## Quick Start
@@ -34,7 +33,7 @@ $ go get -u github.com/TimonOmsk/go-spew
 Add this import line to the file you're working in:
 
 ```Go
-import "github.com/TimonOmsk/go-spew/spew"
+import "github.com/timonomsk/go-spew/spew"
 ```
 
 To dump a variable with full newlines, indentation, type, and pointer
@@ -70,7 +69,7 @@ import (
     "html"
     "net/http"
 
-    "github.com/TimonOmsk/go-spew/spew"
+    "github.com/timonomsk/go-spew/spew"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
